@@ -1,0 +1,20 @@
+groups:
+  - name: website_alerts
+    rules:
+      - alert: WebsiteDown
+        expr: probe_success == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Website {{ $labels.instance }} is down"
+          description: "{{ $labels.instance }} has been down for more than 1 minute."
+      
+      - alert: WebsiteSlow
+        expr: probe_duration_seconds > 5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Website {{ $labels.instance }} is slow"
+          description: "{{ $labels.instance }} took {{ $value }} seconds to respond."
