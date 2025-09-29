@@ -29,4 +29,5 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
 - make alertmanager
 - customize alerts
 - figure out Grafana
+- figure out what server to run prometheus on
 - :p

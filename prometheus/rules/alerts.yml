@@ -12,7 +12,7 @@ groups:
       
       - alert: WebsiteSlow
         expr: probe_duration_seconds > 5
-        for: 2m
+        for: 1m
         labels:
           severity: warning
         annotations:

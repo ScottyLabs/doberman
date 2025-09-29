@@ -36,6 +36,7 @@ scrape_configs:
         - https://lostandfound.andrew.cmu.edu/
         - https://www.scottylabs.org/
         - http://httpstat.us/503 # fails for testing - WebsiteDown
+        - https://httpstat.us/200?sleep=6000 # fails for testing - WebsiteSlow
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
