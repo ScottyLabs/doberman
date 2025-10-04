@@ -51,7 +51,9 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
 ## TODO
 - fix the aforementioned problem
 - make alertmanager - send to Slack/Discord/etc.
+  - Each alert should ping no one/ping relevant people based on severity
 - customize alerts - custom endpoints?
-- figure out Grafana
-- figure out what server to run prometheus on
+  - SSL expiry alerts
+  - Performance degradation alerts
+  - Track performance of prometheus itself as well
 - :p
