@@ -18,3 +18,21 @@ groups:
         annotations:
           summary: "Website {{ $labels.instance }} is slow"
           description: "{{ $labels.instance }} took {{ $value }} seconds to respond."
+
+      - alert: SSLCertExpirySoon
+        expr: (probe_ssl_earliest_cert_expiry - time()) < 86400 * 7
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate for {{ $labels.instance }} expires soon"
+          description: "SSL certificate for {{ $labels.instance }} expires in less than 7 days ({{ $value | humanizeDuration }})."
+      
+      - alert: WebsitePerformanceDegradation
+        expr: increase(probe_duration_seconds[5m]) / 5 > 0.5 and probe_success == 1
+        for: 10m
+        labels:
+          severity: info
+        annotations:
+          summary: "Performance degradation detected for {{ $labels.instance }}"
+          description: "Average probe duration for {{ $labels.instance }} increased significantly over the past 5 minutes ({{ $value }}s)."

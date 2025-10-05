@@ -274,7 +274,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "ALERTS{alertstate=\"firing\"}",
+          "editorMode": "code",
+          "expr": "ALERTS{alertstate=~\"pending|firing\"}",
           "format": "table",
           "instant": true,
           "refId": "A"
@@ -287,9 +288,11 @@
           "options": {
             "excludeByName": {
               "Time": true,
+              "Value": true,
               "__name__": true,
               "job": true
             },
+            "includeByName": {},
             "indexByName": {
               "alertname": 0,
               "alertstate": 2,
@@ -976,7 +979,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "ALERTS{instance=~\"$target\", alertstate=\"firing\"}",
+          "editorMode": "code",
+          "expr": "ALERTS{instance=~\"$target\", alertstate=~\"pending|firing\"}",
           "format": "table",
           "instant": true,
           "refId": "A"
@@ -1411,5 +1415,5 @@
   "timezone": "",
   "title": "Prometheus Blackbox Exporter",
   "uid": "xtkCtBkiz",
-  "version": 13
+  "version": 15
 }
