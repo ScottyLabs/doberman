@@ -1,39 +1,28 @@
 global:
-  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-  # scrape_timeout is set to the global default (10s).
+  scrape_interval: 15s # default = 60s
+  evaluation_interval: 15s # default = 60s
+  # scrape_timeout = default (10s).
 
-remote_write:
-  - url: https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push
-    basic_auth:
-      username: ${USERNAME}
-      password: ${GRAFANA_API_KEY}
+# if we need Grafana Cloud
+# remote_write:
+#   - url: https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push
+#     basic_auth:
+#       username: ${USERNAME}
+#       password: ${GRAFANA_API_KEY}
 
-# Alertmanager configuration
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
            # - alertmanager:9093
 
-# Load rules
 rule_files:
   - "rules/*.yml"
 
 scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-
-  - job_name: node
-    static_configs:
-      - targets: ["localhost:9090"]
-
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
-
-  - job_name: 'blackbox'
-    static_configs:
-      - targets: ['blackbox-exporter:9115']
 
   - job_name: 'blackbox-website-monitoring'
     metrics_path: /probe

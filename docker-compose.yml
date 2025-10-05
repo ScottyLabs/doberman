@@ -1,7 +1,6 @@
 services:
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -22,7 +21,6 @@ services:
 
   blackbox-exporter:
     image: prom/blackbox-exporter:latest
-    container_name: blackbox-exporter
     ports:
       - "9115:9115"
     volumes:
@@ -33,6 +31,23 @@ services:
     networks:
       - monitoring
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - monitoring
+
 networks:
   monitoring:
     driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
