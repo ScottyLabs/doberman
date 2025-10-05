@@ -35,29 +35,32 @@ docker-compose down              # stop all
 docker-compose restart           # restart services
 
 # logs
-docker-compose ps                      # show currently running services
-docker-compose logs                    # show all logs
-docker-compose logs blackbox-exporter  # show logs for blackbox
-docker-compose logs prometheus         # show logs for prometheus
+docker-compose ps                         # show currently running services
+docker-compose logs                       # show all logs
+docker-compose logs <container_name>      # show logs for specific container
+docker inspect network <network_name>     # shows containers on network
 ```
 
 Target for Prometheus is set to <http://localhost:9090/>. Go to Alerts panel on the top toolbar for alerts info, and Status > Target health panel for current endpoint statuses.
 
-So far, there are two alerts: `WebsiteDown` (fires if website has been down for > 1 minute), and `WebsiteSlow` (fires if website takes > 5 seconds to respond). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
+Target for Grafana is <http://localhost:3000/>. Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard.
+
+Currently, there are two alerts: `WebsiteDown` (fires if website has been down for > 1 minute), and `WebsiteSlow` (fires if website takes > 5 seconds to respond). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
 
 ## Note
 Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
 
 ## TODO
-- fix the aforementioned problem
-- make alertmanager - send to Slack/Discord/etc.
+- Fix the aforementioned problem (might not need to fix anymore - could just init on VM and leave running)
+- Make alertmanager - send to Slack/Discord/etc.
+  - Also make sure alerts are actually reaching Grafana
   - Each alert should ping no one/ping relevant people based on severity
-- customize alerts - custom endpoints?
+- Customize alerts - custom endpoints?
   - SSL expiry alerts
   - Performance degradation alerts
   - Track performance of prometheus itself as well
 - Github permissions
   - Update permissions to only allow pull requests
-- make it so alerts actually reach Grafana
-- once VMs are available, host prometheus on VMs
+- Once VMs are available, host prometheus on VMs - figure out how
+- Before deployment, increase the interval between scrapes
 - :p
