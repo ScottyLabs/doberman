@@ -3,13 +3,6 @@ global:
   evaluation_interval: 15s # default = 60s
   # scrape_timeout = default (10s).
 
-# if we need Grafana Cloud
-# remote_write:
-#   - url: https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push
-#     basic_auth:
-#       username: ${USERNAME}
-#       password: ${GRAFANA_API_KEY}
-
 alerting:
   alertmanagers:
     - static_configs:
@@ -32,9 +25,9 @@ scrape_configs:
       - targets:
         - https://cmucourses.com
         - https://cmueats.com
-        - https://maps.scottylabs.org/
-        - https://lostandfound.andrew.cmu.edu/
-        - https://www.scottylabs.org/
+        - https://maps.scottylabs.org
+        - https://lostandfound.andrew.cmu.edu
+        - https://www.scottylabs.org
         - http://httpstat.us/503 # fails for testing - WebsiteDown
         - https://httpbin.org/delay/6.7 # fails for testing - WebsiteSlow
     relabel_configs:
