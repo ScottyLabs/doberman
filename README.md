@@ -45,7 +45,7 @@ Target for Prometheus is set to <http://localhost:9090/>. Go to Alerts panel on 
 
 Target for Grafana is <http://localhost:3000/>. Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard.
 
-Currently, there are two alerts: `WebsiteDown` (fires if website has been down for > 1 minute), and `WebsiteSlow` (fires if website takes > 5 seconds to respond). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
+Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website is taking longer and longer to respond over past 5 mintes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
 
 ## Note
 Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
@@ -63,4 +63,5 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
   - Update permissions to only allow pull requests
 - Once VMs are available, host prometheus on VMs - figure out how
 - Before deployment, increase the interval between scrapes
+- Figure out how to make every alert show up on Grafana
 - :p
