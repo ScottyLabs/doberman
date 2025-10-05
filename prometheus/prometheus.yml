@@ -1,7 +1,7 @@
 global:
   scrape_interval: 15s # default = 60s
-  evaluation_interval: 15s # default = 60s
-  # scrape_timeout = default (10s).
+  evaluation_interval: 30s # default = 60s
+  # scrape_timeout = default (10s)
 
 alerting:
   alertmanagers:
@@ -23,17 +23,49 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-        - https://cmucourses.com
-        - https://cmueats.com
-        - https://maps.scottylabs.org
-        - https://lostandfound.andrew.cmu.edu
-        - https://www.scottylabs.org
-        - http://httpstat.us/503 # fails for testing - WebsiteDown
-        - https://httpbin.org/delay/6.7 # fails for testing - WebsiteSlow
+          - https://cmucourses.com
+        labels:
+          instance: 'cmucourses'
+
+      - targets:
+          - https://cmueats.com
+        labels:
+          instance: 'cmueats'
+
+      - targets:
+          - https://maps.scottylabs.org
+        labels:
+          instance: 'cmumaps'
+
+      - targets:
+          - https://lostandfound.andrew.cmu.edu
+        labels:
+          instance: 'lostandfound'
+
+      - targets:
+          - https://www.scottylabs.org
+        labels:
+          instance: 'sl-main-site'
+
+      # fails for testing - WebsiteDown
+      - targets:
+          - http://httpstat.us/503
+        labels:
+          instance: 'test-503'
+
+      # fails for testing - WebsiteSlow
+      - targets:
+          - https://httpbin.org/delay/6.7
+        labels:
+          instance: 'test-delay'
+
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
+
+      # saves full URL to label 'url' for logs
+      - source_labels: [__address__]
+        target_label: url
+
       - target_label: __address__
         replacement: blackbox-exporter:9115
