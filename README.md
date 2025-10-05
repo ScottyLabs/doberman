@@ -59,9 +59,11 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
   - SSL expiry alerts
   - Performance degradation alerts
   - Track performance of prometheus itself as well
-- Github permissions
+- Github
   - Update permissions to only allow pull requests
+  - Add staging branch
 - Once VMs are available, host prometheus on VMs - figure out how
 - Before deployment, increase the interval between scrapes
 - Figure out how to make every alert show up on Grafana
+- Probably should refine the layout of the dashboard as well
 - :p
