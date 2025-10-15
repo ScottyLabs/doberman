@@ -38,14 +38,14 @@ docker-compose restart           # restart services
 docker-compose ps                         # show currently running services
 docker-compose logs                       # show all logs
 docker-compose logs <container_name>      # show logs for specific container
-docker inspect network <network_name>     # shows containers on network
+docker inspect network <network_name>     # show containers on network
 ```
 
 Target for Prometheus is set to <http://localhost:9090/>. Go to Alerts panel on the top toolbar for alerts info, and Status > Target health panel for current endpoint statuses.
 
 Target for Grafana is <http://localhost:3000/>. Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
 
-Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website is taking longer and longer to respond over past 5 mintes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
+Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
 
 ## Note
 Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
@@ -56,7 +56,9 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
   - [ ] Also make sure alerts are actually reaching Grafana
   - [ ] Each alert should ping no one/ping relevant people based on severity
 - [ ] Fix alerts timeline short-term weird chunks (only on Jason's setup? someone else should check)
-- [ ] Custom endpoints - work with other teams
+- [ ] Custom endpoints (?) - work with other teams
+  - Maybe not required anymore, if we use synthetic monitoring (see below)
+- [ ] Synthetic monitoring - see Slack for details (agent to intelligently detect issues/check core functionality). Playwright equivalent in Grafana = [k6 browser check](https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/k6-browser/).
 - [ ] Github
   - [ ] Update permissions to only allow pull requests
   - [ ] Add staging branch
