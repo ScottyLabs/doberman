@@ -15,7 +15,7 @@ rule_files:
 scrape_configs:
   - job_name: "prometheus"
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ["www-02.scottylabs.org:9090"]
 
   - job_name: 'blackbox-website-monitoring'
     metrics_path: /probe

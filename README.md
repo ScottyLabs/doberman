@@ -48,9 +48,12 @@ Target for Grafana is <http://localhost:3000/>. Go to Dashboards > Prometheus Bl
 Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
 
 ## Note
-Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
+- This is the VM setup branch. If you run code from this branch on local, it won't work. Also note that podman is equivalent to docker (for our use case).
+
+- Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
 
 ## TODO
+- [ ] Update this README for VM-specific info
 - [ ] Fix the aforementioned problem (might not need to fix anymore - could just init on VM and leave running)
 - [ ] Make alertmanager - send to Slack/Discord/etc.
   - [ ] Also make sure alerts are actually reaching Grafana
@@ -59,13 +62,12 @@ Before running, make sure to create `data/prometheus/queries.active` inside of t
 - [ ] Custom endpoints (?) - work with other teams
   - Maybe not required anymore, if we use synthetic monitoring (see below)
 - [ ] Synthetic monitoring - see Slack for details (agent to intelligently detect issues/check core functionality). Playwright equivalent in Grafana = [k6 browser check](https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/k6-browser/).
-- [ ] Github
-  - [ ] Update permissions to only allow pull requests
-  - [ ] Add staging branch
-- [ ] Once VMs are available, host prometheus on VMs - figure out how
-- [ ] Before deployment, increase the interval between scrapes
+- [ ] Deploy to VM
+  - [ ] Before deployment, increase the interval between scrapes
 - [ ] Figure out how to make every alert show up on Grafana
 - [ ] Probably should refine the layout of the dashboard as well
+- [x] Github
+  - [x] Update permissions to only allow pull requests
 - [x] Customize alerts
   - [x] SSL expiry alert
   - [x] Performance degradation alert
