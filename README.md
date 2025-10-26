@@ -2,70 +2,63 @@
 
 Uptime Monitor for ScottyLabs
 
-## Installation & Launch
+## Launch
 
-1. Install [Docker](https://docs.docker.com/get-started/get-docker/); can check for successful installation with `docker --version` and `docker compose version`
-
-(Note: If you install with Docker Engine (Linux), you should install Docker Compose as well.)
-
-2. Clone the repository:
-`git clone https://github.com/ScottyLabs/doberman.git`
-
-3. Run Prometheus:
-
-Option 1 - with `-d` flag (**recommended**)
+Run Prometheus:
 ```bash
-docker-compose up -d
+podman-compose up -d
 ```
-- Detached mode; starts containers in background
-- Can still see all logs with commands below
+- Flag `-d`: detached mode; starts containers in background
 
-Option 2 (for debugging/seeing live logs)
+Other useful commands:
 ```bash
-docker-compose up
-```
-- Starts containers in foreground
-- Terminal is occupied; shows live logs from containers
-- `Ctrl+C` to stop
-
-Other useful commands
-```bash
-docker-compose up -d --build     # rebuild and run
-docker-compose down              # stop all
-docker-compose restart           # restart services
+podman-compose up -d --build     # rebuild and run
+podman-compose down              # stop all (declared in current podman-compose.yml)
+podman-compose restart           # restart services
 
 # logs
-docker-compose ps                         # show currently running services
-docker-compose logs                       # show all logs
-docker-compose logs <container_name>      # show logs for specific container
-docker inspect network <network_name>     # show containers on network
+podman-compose ps                         # show currently running services
+podman-compose logs                       # show all logs
+podman-compose logs <container_name>      # show logs for specific container
+podman inspect network <network_name>     # show containers on network
 ```
 
-Target for Prometheus is set to <http://localhost:9090/>. Go to Alerts panel on the top toolbar for alerts info, and Status > Target health panel for current endpoint statuses.
-
-Target for Grafana is <http://localhost:3000/>. Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
+Target for Grafana is `http://<VM_IP>:3000/`. (The VM's IP address can be obtained via running `ip addr show` on the VM.) Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
 
 Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
 
 ## Note
-- This is the VM setup branch. If you run code from this branch on local, it won't work. Also note that podman is equivalent to docker (for our use case).
+- This is the branch configured for VM deployment. If you run this branch on local, it likely won't work. Also note that podman is equivalent to docker (for our use case).
 
-- Before running, make sure to create `data/prometheus/queries.active` inside of the root directory, otherwise Prometheus will fail. This is not the expected behavior, as Prometheus should bootstrap itself on first startup - not sure how to fix this, may have to do with chown nobody. See <https://github.com/prometheus/prometheus/issues/5976> for details.
+- If deploying for the first time (or after a clean reset), run the following commands to give Podman the necessary permissions to access Prometheus data:
+```bash
+mkdir -p data/prometheus
+sudo chown -R 65534:65534 data    # assigns ownership to nobody
+sudo chmod -R 777 data            # makes directory world-writable
+```
+NOTE: If this new folder's permissions are tampered with after creation, for some reason reverting the permissions back to normal does NOT cause podman to start working again (as far as I know), and so far the only fix I've found is to rm -rf the folder and re-run the above commands. Thus, in order to avoid data loss, run commands on this folder with sudo wherever possible.
 
 ## TODO
-- [ ] Update this README for VM-specific info
-- [ ] Fix the aforementioned problem (might not need to fix anymore - could just init on VM and leave running)
+
+### General stuff
+- [ ] Fix permissions issue above
 - [ ] Make alertmanager - send to Slack/Discord/etc.
   - [ ] Also make sure alerts are actually reaching Grafana
   - [ ] Each alert should ping no one/ping relevant people based on severity
+- [ ] Figure out how to make every alert show up on Grafana
+- [ ] Probably should refine the layout of the dashboard as well
 - [ ] Fix alerts timeline short-term weird chunks (only on Jason's setup? someone else should check)
 - [ ] Custom endpoints (?) - work with other teams
   - Maybe not required anymore, if we use synthetic monitoring (see below)
 - [ ] Synthetic monitoring - see Slack for details (agent to intelligently detect issues/check core functionality). Playwright equivalent in Grafana = [k6 browser check](https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/create-checks/checks/k6-browser/).
+
+### VM stuff
 - [ ] Deploy to VM
-  - [ ] Before deployment, increase the interval between scrapes
-- [ ] Figure out how to make every alert show up on Grafana
-- [ ] Probably should refine the layout of the dashboard as well
+  - [ ] Set up data folder
+  - [x] Increase interval between scrapes
+
+### Done
+- [x] Update this README for VM info
 - [x] Github
   - [x] Update permissions to only allow pull requests
 - [x] Customize alerts
