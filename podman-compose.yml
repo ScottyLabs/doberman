@@ -1,6 +1,7 @@
 services:
   prometheus:
-    image: prom/prometheus:latest
+    # vm config note: docker.io in front so podman can find images
+    image: docker.io/prom/prometheus:latest
     ports:
       - "9090:9090"
     volumes:
@@ -20,7 +21,7 @@ services:
       - monitoring
 
   blackbox-exporter:
-    image: prom/blackbox-exporter:latest
+    image: docker.io/prom/blackbox-exporter:latest
     ports:
       - "9115:9115"
     volumes:
@@ -32,7 +33,7 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana:latest
+    image: docker.io/grafana/grafana:latest
     ports:
       - "3000:3000"
     volumes:

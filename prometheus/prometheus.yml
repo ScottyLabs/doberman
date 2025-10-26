@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s # default = 60s
-  evaluation_interval: 30s # default = 60s
+  scrape_interval: 30s
+  evaluation_interval: 30s
   # scrape_timeout = default (10s)
 
 alerting:
