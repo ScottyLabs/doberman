@@ -7,6 +7,7 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
       - ./data/prometheus:/prometheus
+
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -16,6 +17,19 @@ services:
       - '--web.enable-lifecycle'
       - '--web.enable-admin-api'
     restart: unless-stopped
+    networks:
+      - monitoring
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./slack_api_url.txt:/etc/alertmanager/slack_api_url.txt
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
     networks:
       - monitoring
 
