@@ -25,7 +25,9 @@ podman inspect network <network_name>     # show containers on network
 
 Target for Grafana is `http://<VM_IP>:3000/`. (The VM's IP address can be obtained via running `ip addr show` on the VM.) Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
 
-Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Note that <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow. All other endpoints should be alive and kicking (metaphorically speaking).
+Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Alertmanager should be working.
+
+Previous test endpoints (currently unused): <http://httpstat.us/503> is expected to be down, and <https://httpbin.org/delay/6.7> is expected to be slow.
 
 ## Note
 - This is the branch configured for VM deployment. If you run this branch on local, it likely won't work. Also note that podman is equivalent to docker (for our use case).
@@ -36,17 +38,12 @@ mkdir -p data/prometheus
 sudo chown -R 65534:65534 data    # assigns ownership to nobody
 sudo chmod -R 777 data            # makes directory world-writable
 ```
-NOTE: If this new folder's permissions are tampered with after creation, for some reason reverting the permissions back to normal does NOT cause podman to start working again (as far as I know), and so far the only fix I've found is to rm -rf the folder and re-run the above commands. Thus, in order to avoid data loss, run commands on this folder with sudo wherever possible.
 
 ## TODO
 
 ### General stuff
-- [ ] Fix permissions issue above
-- [ ] Make alertmanager - send to Slack/Discord/etc.
-  - [ ] Also make sure alerts are actually reaching Grafana
-  - [ ] Each alert should ping no one/ping relevant people based on severity
-- [ ] Figure out how to make every alert show up on Grafana
-- [ ] Probably should refine the layout of the dashboard as well
+- [ ] Test alertmanager again, make sure it works on VM
+- [ ] Make dashboard prettier (as needed)
 - [ ] Fix alerts timeline short-term weird chunks (only on Jason's setup? someone else should check)
 - [ ] Custom endpoints (?) - work with other teams
   - Maybe not required anymore, if we use synthetic monitoring (see below)
@@ -58,6 +55,9 @@ NOTE: If this new folder's permissions are tampered with after creation, for som
   - [x] Increase interval between scrapes
 
 ### Done
+- [x] Make alertmanager - send to Slack/Discord/etc.
+  - [x] Also make sure alerts are actually reaching Grafana
+- [x] Figure out how to make every alert show up on Grafana
 - [x] Update this README for VM info
 - [x] Github
   - [x] Update permissions to only allow pull requests
