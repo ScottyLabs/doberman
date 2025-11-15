@@ -3,4 +3,3 @@ test-results/
 test-results.json
 playwright-report/
 package-lock.json
-.env

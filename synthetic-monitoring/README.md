@@ -6,10 +6,10 @@ Playwright-based functional tests for cmucourses.com that expose Prometheus metr
 
 ```bash
 # Build and run with other services
-podman-compose up -d --build
+docker-compose up -d --build
 
 # View logs
-podman-compose logs synthetic-monitoring
+docker-compose logs synthetic-monitoring
 
 # Manual test trigger
 curl http://localhost:9091/trigger
@@ -23,7 +23,7 @@ curl http://localhost:9091/trigger
 
 ## Configuration
 
-Environment variables (in `podman-compose.yml`):
+Environment variables (in `docker-compose.yml`):
 - `TEST_INTERVAL` - Test frequency in ms (default: 300000 = 5 min)
 - `PORT` - Metrics port (default: 9091)
 
