@@ -23,7 +23,7 @@ podman-compose logs <container_name>      # show logs for specific container
 podman inspect network <network_name>     # show containers on network
 ```
 
-Target for Grafana is `http://<VM_IP>:3000/`. (The VM's IP address can be obtained via running `ip addr show` on the VM.) Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
+Target for Grafana is `http://<VM_IP>:3001/`. (The VM's IP address can be obtained via running `ip addr show` on the VM.) Go to Dashboards > Prometheus Blackbox Exporter in the left menu for the main dashboard, > Prometheus 2.0 Stats for Prometheus metrics.
 
 Currently, there are four alerts: `WebsiteDown` (fires if website has been down for > 1 minute), `WebsiteSlow` (fires if website takes > 5 seconds to respond),`SSLCertExpirySoon` (fires if SSL certificate is < 1 week from expiring), `WebsitePerformanceDegradation` (fires if website response time continues to increase over 5 minutes). Alertmanager should be working.
 
