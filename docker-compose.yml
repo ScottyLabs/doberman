@@ -58,6 +58,20 @@ services:
     networks:
       - monitoring
 
+  synthetic-monitoring:
+    build:
+      context: ./synthetic-monitoring
+      dockerfile: Dockerfile
+    container_name: synthetic-monitoring
+    ports:
+      - "9091:9091"
+    environment:
+      - PORT=9091
+      - TEST_INTERVAL=300000
+    restart: unless-stopped
+    networks:
+      - monitoring
+
 networks:
   monitoring:
     driver: bridge

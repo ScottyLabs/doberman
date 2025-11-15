@@ -1,0 +1,25 @@
+{
+  "name": "synthetic-monitoring",
+  "version": "1.0.0",
+  "description": "Synthetic monitoring for cmucourses.com using Playwright",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "synthetic-monitoring",
+    "playwright",
+    "prometheus"
+  ],
+  "author": "ScottyLabs",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.40.0",
+    "express": "^4.18.2",
+    "prom-client": "^15.1.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.40.0"
+  }
+}

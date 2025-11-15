@@ -17,6 +17,11 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
+  - job_name: 'synthetic-monitoring'
+    static_configs:
+      - targets: ['synthetic-monitoring:9091']
+    scrape_interval: 60s
+
   - job_name: 'blackbox-website-monitoring'
     metrics_path: /probe
     params:

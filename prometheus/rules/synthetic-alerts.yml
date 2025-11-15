@@ -1,0 +1,65 @@
+groups:
+  - name: synthetic_monitoring_alerts
+    rules:
+      - alert: SyntheticTestsFailing
+        expr: synthetic_tests_failed_total > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Synthetic tests are failing for cmucourses.com"
+          description: "{{ $value }} synthetic test(s) have been failing for more than 10 minutes. Core functionality may be broken."
+
+      - alert: SyntheticMonitoringDown
+        expr: up{job="synthetic-monitoring"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Synthetic monitoring service is down"
+          description: "The synthetic monitoring service has been down for more than 5 minutes. Functional testing is not running."
+
+      - alert: CoreFunctionalityBroken
+        expr: synthetic_functionality_up{feature=~"homepage|search"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Core functionality broken on {{ $labels.site }}"
+          description: "The {{ $labels.feature }} feature on {{ $labels.site }} has been broken for more than 5 minutes."
+
+      - alert: HighJavaScriptErrors
+        expr: synthetic_console_errors_total > 5
+        for: 15m
+        labels:
+          severity: info
+        annotations:
+          summary: "High number of JavaScript errors on {{ $labels.site }}"
+          description: "{{ $labels.site }} has {{ $value }} console errors, which may indicate frontend issues."
+
+      - alert: SlowFeatureResponse
+        expr: synthetic_feature_response_time_ms > 10000
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.feature }} is responding slowly on {{ $labels.site }}"
+          description: "The {{ $labels.feature }} feature is taking {{ $value }}ms to respond (>10s), users may experience delays."
+
+      - alert: APIFailureRate
+        expr: (synthetic_api_health{metric_type="failed_calls"} / synthetic_api_health{metric_type="total_calls"}) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API failure rate on {{ $labels.site }}"
+          description: "More than 10% of API calls are failing on {{ $labels.site }}."
+
+      - alert: SyntheticTestsNotRunning
+        expr: (time() - synthetic_last_run_timestamp) > 600
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Synthetic tests haven't run recently"
+          description: "Synthetic tests haven't run in over 10 minutes. The monitoring service may be stuck."
