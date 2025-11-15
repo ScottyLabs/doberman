@@ -1,3 +1,4 @@
 data
 .env
+slack_api_url.txt
 .DS_Store
